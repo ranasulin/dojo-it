@@ -18,19 +18,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @topic = Topic.find(params[:topic_id])
-    @post = current_user.posts.build(post_params)
-    @post.topic = @topic
-
-    authorize @post
-    if @post.save
-      @post.create_vote
-      flash[:notice] = "Post was saved."
-      redirect_to [@topic, @post]
-    else
-      flash[:error] = "There was an error saving the post. Please try again."
-      render :new
-    end
+    save_with_initial_vote
   end
 
   def update
@@ -62,6 +50,25 @@ class PostsController < ApplicationController
   end
 
   private
+
+  def save_with_initial_vote
+    @topic = Topic.find(params[:topic_id])
+    @post = current_user.posts.build(post_params)
+    @post.topic = @topic
+
+    authorize @post
+    ActiveRecord::Base.transaction do
+      @post.save
+      @post.create_vote
+    end
+    if @post.present?
+      flash[:notice] = "Post was saved."
+      redirect_to [@topic, @post]
+    else
+      flash[:error] = "There was an error saving the post. Please try again."
+      render :new
+    end
+  end
 
   def post_params
     params.require(:post).permit(:title, :body, :image)
