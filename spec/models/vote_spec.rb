@@ -1,19 +1,11 @@
+require 'rails_helper'
+
 describe Vote do
   describe "validations" do
     describe "value validation" do
-      it "allows 1 as value" do
-        vote = Value.new(value:1)
-        expect(@vote.valid?).to eq true
-      end
-
-      it "allows -1 as value" do
-        vote = Value.new(value:-1)
-        expect(@vote.valid?).to eq true
-      end
-
-      it "do not allows 2 as value" do
-        vote = Value.new(value:2)
-        expect(@vote.valid?).to eq false
+      it "only allows -1 or 1 as values" do
+        bad_v = Vote.new(value:2)
+        expect(bad_v.valid?).to eq(false)
       end
     end
   end
