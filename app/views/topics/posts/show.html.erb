@@ -29,15 +29,19 @@
 </div>
 <div class="row">Comments:
   <ul>
-    <% if @comments.count > 0 %>
-      <% @comments.each do |comment| %>
-        <%= render({ partial: 'comments/comment', locals: {comment: comment} }) %>
+    <div class='js-comments'>
+      <% if @comments.count > 0 %>
+        <% @comments.each do |comment| %>
+          <%= render({ partial: 'comments/comment', locals: {comment: comment} }) %>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
   </ul>
 </div>
 <div class="row">
-  <% if current_user %>
-    <%= render partial: 'comments/form', locals: { comment: Comment.new } %>
-  <% end %>
+  <div class='new-comment'>
+    <% if current_user %>
+      <%= render partial: 'comments/form', locals: { comment: Comment.new } %>
+    <% end %>
+  </div>
 </div>
