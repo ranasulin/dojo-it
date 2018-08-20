@@ -6,7 +6,7 @@ class Comment < ActiveRecord::Base
   validates :user, presence: true
   validates :body, length: { minimum: 5 }, presence: true
 
-  default_scope { order('updated_at DESC') }
+  default_scope { order('updated_at') }
 
   private
 
